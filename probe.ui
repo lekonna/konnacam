@@ -1,0 +1,652 @@
+<?xml version='1.0' encoding='utf-8'?>
+<interface>
+  <object class="ttk.Frame" id="mainwindow">
+    <property name="height">400</property>
+    <property name="padding">0</property>
+    <property name="width">620</property>
+    <layout>
+      <property name="column">0</property>
+      <property name="propagate">True</property>
+      <property name="row">0</property>
+    </layout>
+    <child>
+      <object class="ttk.Button" id="Save_button">
+        <property name="command">store_machine_point</property>
+        <property name="takefocus">true</property>
+        <property name="text" translatable="yes">Store point</property>
+        <layout>
+          <property name="column">3</property>
+          <property name="ipady">0</property>
+          <property name="pady">0</property>
+          <property name="propagate">True</property>
+          <property name="row">6</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="tk.Text" id="Pointlist_textfield">
+        <property name="background">#000000</property>
+        <property name="cursor">arrow</property>
+        <property name="font">TkFixedFont</property>
+        <property name="foreground">#00ff80</property>
+        <property name="height">8</property>
+        <property name="highlightbackground">#ff8040</property>
+        <property name="highlightcolor">#ffffff</property>
+        <property name="insertborderwidth">0</property>
+        <property name="insertontime">100</property>
+        <property name="insertwidth">1</property>
+        <property name="maxundo">0</property>
+        <property name="padx">1</property>
+        <property name="pady">0</property>
+        <property name="selectborderwidth">1</property>
+        <property name="undo">true</property>
+        <property name="width">50</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="columnspan">5</property>
+          <property name="ipadx">0</property>
+          <property name="padx">10</property>
+          <property name="pady">0</property>
+          <property name="propagate">True</property>
+          <property name="row">7</property>
+          <property name="rowspan">1</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Button" id="Y_halved_button">
+        <property name="command">halve_y</property>
+        <property name="takefocus">false</property>
+        <property name="text" translatable="yes">Y / 2</property>
+        <layout>
+          <property name="column">6</property>
+          <property name="propagate">True</property>
+          <property name="row">3</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Button" id="Z_halved_button">
+        <property name="command">halve_z</property>
+        <property name="takefocus">false</property>
+        <property name="text" translatable="yes">Z / 2</property>
+        <layout>
+          <property name="column">6</property>
+          <property name="propagate">True</property>
+          <property name="row">4</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Button" id="X_halved_button">
+        <property name="command">halve_x</property>
+        <property name="takefocus">false</property>
+        <property name="text" translatable="yes">X / 2</property>
+        <layout>
+          <property name="column">6</property>
+          <property name="propagate">True</property>
+          <property name="row">2</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Labelframe" id="Machine_group_label">
+        <property name="height">200</property>
+        <property name="takefocus">false</property>
+        <property name="text" translatable="yes">Machine	</property>
+        <property name="width">200</property>
+        <layout>
+          <property name="column">6</property>
+          <property name="propagate">True</property>
+          <property name="row">5</property>
+        </layout>
+        <child>
+          <object class="ttk.Button" id="XY_to_zero_button">
+            <property name="command">device_move_to_xy_zero</property>
+            <property name="takefocus">false</property>
+            <property name="text" translatable="yes">X Y to zero</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Button" id="Z_to_zero_button">
+            <property name="command">device_move_to_z_zero</property>
+            <property name="takefocus">false</property>
+            <property name="text" translatable="yes">Z to zero</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="propagate">True</property>
+              <property name="row">1</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Button" id="Connect_button">
+            <property name="command">connect_machine</property>
+            <property name="takefocus">false</property>
+            <property name="text" translatable="yes">Connect	</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="propagate">True</property>
+              <property name="row">2</property>
+            </layout>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="tk.Canvas" id="Display_canvas">
+        <property name="background">#000000</property>
+        <property name="height">600</property>
+        <property name="width">800</property>
+        <layout>
+          <property name="column">8</property>
+          <property name="propagate">True</property>
+          <property name="row">0</property>
+          <property name="rowspan">12</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Labelframe" id="Movement_buttons_Frame">
+        <property name="height">200</property>
+        <property name="takefocus">false</property>
+        <property name="text" translatable="yes">Machine move</property>
+        <property name="width">200</property>
+        <layout>
+          <property name="column">1</property>
+          <property name="columnspan">5</property>
+          <property name="propagate">True</property>
+          <property name="row">1</property>
+          <property name="rowspan">6</property>
+          <rows>
+            <row id="0">
+              <property name="minsize">0</property>
+            </row>
+          </rows>
+        </layout>
+        <child>
+          <object class="ttk.Button" id="Y_move_button_pos">
+            <property name="command">device_move_y_pos</property>
+            <property name="takefocus">false</property>
+            <property name="text" translatable="yes">Y+</property>
+            <property name="width">12</property>
+            <layout>
+              <property name="column">3</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Button" id="X_move_button_neg">
+            <property name="command">device_move_x_neg</property>
+            <property name="takefocus">false</property>
+            <property name="text" translatable="yes">X-</property>
+            <property name="width">12</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="propagate">True</property>
+              <property name="row">2</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Button" id="X_move_button_pos">
+            <property name="command">device_move_x_pos</property>
+            <property name="takefocus">false</property>
+            <property name="text" translatable="yes">X+</property>
+            <property name="width">12</property>
+            <layout>
+              <property name="column">4</property>
+              <property name="propagate">True</property>
+              <property name="row">2</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Button" id="Y_move_button_neg">
+            <property name="command">device_move_y_neg</property>
+            <property name="takefocus">false</property>
+            <property name="text" translatable="yes">Y-</property>
+            <property name="width">12</property>
+            <layout>
+              <property name="column">3</property>
+              <property name="propagate">True</property>
+              <property name="row">4</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Button" id="Z_move_button_pos">
+            <property name="command">device_move_z_pos</property>
+            <property name="takefocus">false</property>
+            <property name="text" translatable="yes">Z+</property>
+            <property name="width">12</property>
+            <layout>
+              <property name="column">4</property>
+              <property name="pady">2</property>
+              <property name="propagate">True</property>
+              <property name="row">5</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Button" id="Z_move_button_neg">
+            <property name="command">device_move_z_neg</property>
+            <property name="takefocus">false</property>
+            <property name="text" translatable="yes">Z-</property>
+            <property name="width">12</property>
+            <layout>
+              <property name="column">4</property>
+              <property name="pady">2</property>
+              <property name="propagate">True</property>
+              <property name="row">6</property>
+            </layout>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Labelframe" id="cord_label_frame">
+        <property name="height">200</property>
+        <property name="text" translatable="yes">Machine position</property>
+        <property name="width">200</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="columnspan">7</property>
+          <property name="propagate">True</property>
+          <property name="row">0</property>
+          <property name="rowspan">2</property>
+        </layout>
+        <child>
+          <object class="ttk.Label" id="x_cord">
+            <property name="anchor">e</property>
+            <property name="background">#000000</property>
+            <property name="font">{TkFixedFont } 20 {}</property>
+            <property name="foreground">#00ff40</property>
+            <property name="justify">right</property>
+            <property name="padding">10</property>
+            <property name="text" translatable="yes">0.000</property>
+            <property name="textvariable">string:device_x</property>
+            <property name="width">8</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="propagate">True</property>
+              <property name="row">1</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="y_cord">
+            <property name="anchor">e</property>
+            <property name="background">#000000</property>
+            <property name="font">{TkFixedFont } 20 {}</property>
+            <property name="foreground">#80ff80</property>
+            <property name="justify">right</property>
+            <property name="padding">10</property>
+            <property name="text" translatable="yes">0.000</property>
+            <property name="textvariable">string:device_y</property>
+            <property name="width">8</property>
+            <layout>
+              <property name="column">3</property>
+              <property name="propagate">True</property>
+              <property name="row">1</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="z_cord">
+            <property name="anchor">e</property>
+            <property name="background">#000000</property>
+            <property name="font">{TkFixedFont } 20 {}</property>
+            <property name="foreground">#80ff80</property>
+            <property name="justify">right</property>
+            <property name="padding">10</property>
+            <property name="text" translatable="yes">0.000</property>
+            <property name="textvariable">string:device_z</property>
+            <property name="width">8</property>
+            <layout>
+              <property name="column">5</property>
+              <property name="propagate">True</property>
+              <property name="row">1</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="Label_X">
+            <property name="foreground">#0000ff</property>
+            <property name="text" translatable="yes">X</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="Label_Y">
+            <property name="foreground">#0000ff</property>
+            <property name="text" translatable="yes">Y</property>
+            <layout>
+              <property name="column">2</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="Label_Z">
+            <property name="foreground">#0000ff</property>
+            <property name="text" translatable="yes">Z</property>
+            <layout>
+              <property name="column">4</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Button" id="Zero_x_button">
+            <property name="command">zero_x</property>
+            <property name="takefocus">false</property>
+            <property name="text" translatable="yes">Zero</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="propagate">True</property>
+              <property name="row">2</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Button" id="Zero_y_button">
+            <property name="command">zero_y</property>
+            <property name="takefocus">false</property>
+            <property name="text" translatable="yes">Zero</property>
+            <layout>
+              <property name="column">3</property>
+              <property name="propagate">True</property>
+              <property name="row">2</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Button" id="Zero_z_button">
+            <property name="command">zero_z</property>
+            <property name="takefocus">false</property>
+            <property name="text" translatable="yes">Zero</property>
+            <layout>
+              <property name="column">5</property>
+              <property name="propagate">True</property>
+              <property name="row">2</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Button" id="zeroall_button">
+            <property name="command">zero_all</property>
+            <property name="takefocus">false</property>
+            <property name="text" translatable="yes">Zero All</property>
+            <layout>
+              <property name="column">6</property>
+              <property name="padx">10</property>
+              <property name="propagate">True</property>
+              <property name="row">1</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="machine_x_cord">
+            <property name="anchor">e</property>
+            <property name="background">#000000</property>
+            <property name="font">{TkFixedFont 20} 20 {}</property>
+            <property name="foreground">#ffff00</property>
+            <property name="justify">right</property>
+            <property name="padding">10</property>
+            <property name="text" translatable="yes">0.000</property>
+            <property name="textvariable">string:machine_x</property>
+            <property name="width">8</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="pady">2</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="machine_y_cord">
+            <property name="anchor">e</property>
+            <property name="background">#000000</property>
+            <property name="font">{TkFixedFont 2} 20 {}</property>
+            <property name="foreground">#ffff00</property>
+            <property name="padding">10</property>
+            <property name="text" translatable="yes">0.000</property>
+            <property name="textvariable">string:machine_y</property>
+            <property name="width">8</property>
+            <layout>
+              <property name="column">3</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="machine_z_cord">
+            <property name="anchor">e</property>
+            <property name="background">#000000</property>
+            <property name="font">{TkFixedFont 20} 20 {}</property>
+            <property name="foreground">#ffff00</property>
+            <property name="padding">10</property>
+            <property name="text" translatable="yes">0.000</property>
+            <property name="textvariable">string:machine_z</property>
+            <property name="width">8</property>
+            <layout>
+              <property name="column">5</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Button" id="zeroall_machine_button">
+            <property name="command">zero_all_machine</property>
+            <property name="takefocus">false</property>
+            <property name="text" translatable="yes">Zero All</property>
+            <layout>
+              <property name="column">6</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+            </layout>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Labelframe" id="speed_frame">
+        <property name="height">200</property>
+        <property name="takefocus">false</property>
+        <property name="width">200</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="columnspan">3</property>
+          <property name="propagate">True</property>
+          <property name="row">2</property>
+          <property name="rowspan">4</property>
+        </layout>
+        <child>
+          <object class="ttk.Radiobutton" id="Speed_1x_button">
+            <property name="command">set_step_size</property>
+            <property name="compound">left</property>
+            <property name="takefocus">false</property>
+            <property name="text" translatable="yes">0.001</property>
+            <property name="value">0.001</property>
+            <property name="variable">double:step_size</property>
+            <property name="width">10</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="propagate">True</property>
+              <property name="row">6</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Radiobutton" id="Speed_10x_button">
+            <property name="command">set_step_size</property>
+            <property name="compound">left</property>
+            <property name="takefocus">false</property>
+            <property name="text" translatable="yes">0.01</property>
+            <property name="value">0.01</property>
+            <property name="variable">double:step_size</property>
+            <property name="width">10</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="propagate">True</property>
+              <property name="row">7</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Radiobutton" id="Speed_100x_button">
+            <property name="command">set_step_size</property>
+            <property name="compound">left</property>
+            <property name="takefocus">false</property>
+            <property name="text" translatable="yes">0.1</property>
+            <property name="value">0.1</property>
+            <property name="variable">double:step_size</property>
+            <property name="width">10</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="propagate">True</property>
+              <property name="row">8</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Radiobutton" id="Speed_1000x_button">
+            <property name="command">set_step_size</property>
+            <property name="compound">left</property>
+            <property name="takefocus">false</property>
+            <property name="text" translatable="yes">1.0</property>
+            <property name="value">1.0</property>
+            <property name="variable">double:step_size</property>
+            <property name="width">10</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="propagate">True</property>
+              <property name="row">9</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="step_label">
+            <property name="compound">left</property>
+            <property name="justify">left</property>
+            <property name="text" translatable="yes">Step size</property>
+            <property name="width">14</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="propagate">True</property>
+              <property name="row">5</property>
+            </layout>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Labelframe" id="UI_frame">
+        <property name="height">200</property>
+        <property name="text" translatable="yes">UI</property>
+        <property name="width">200</property>
+        <layout>
+          <property name="column">6</property>
+          <property name="propagate">True</property>
+          <property name="row">6</property>
+        </layout>
+        <child>
+          <object class="ttk.Entry" id="Circle_Entry">
+            <property name="justify">right</property>
+            <property name="text" translatable="yes">40</property>
+            <property name="textvariable">int:40</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="propagate">True</property>
+              <property name="row">1</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="circle radius label">
+            <property name="text" translatable="yes">Circle radius</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+            </layout>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Button" id="Clear_points_button">
+        <property name="command">clear_points</property>
+        <property name="takefocus">false</property>
+        <property name="text" translatable="yes">Clear Points</property>
+        <layout>
+          <property name="column">5</property>
+          <property name="padx">10</property>
+          <property name="propagate">True</property>
+          <property name="row">7</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Scrollbar" id="Scrollbar">
+        <property name="orient">vertical</property>
+        <layout>
+          <property name="column">4</property>
+          <property name="ipady">45</property>
+          <property name="pady">0</property>
+          <property name="propagate">True</property>
+          <property name="row">7</property>
+          <property name="rowspan">1</property>
+          <property name="sticky">e</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Button" id="Delete_last_button">
+        <property name="command">delete_last</property>
+        <property name="takefocus">false</property>
+        <property name="text" translatable="yes">Delete last</property>
+        <layout>
+          <property name="column">4</property>
+          <property name="propagate">True</property>
+          <property name="row">6</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Label" id="status_label">
+        <property name="borderwidth">0</property>
+        <property name="compound">top</property>
+        <property name="justify">left</property>
+        <property name="padding">0</property>
+        <property name="relief">sunken</property>
+        <property name="text" translatable="yes">Status:</property>
+        <property name="textvariable">string:status</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="columnspan">10</property>
+          <property name="propagate">True</property>
+          <property name="row">12</property>
+          <property name="sticky">sew</property>
+        </layout>
+      </object>
+    </child>
+  </object>
+</interface>
