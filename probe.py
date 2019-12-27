@@ -13,7 +13,7 @@ width = 800
 height = 600
 
 CAM = True
-#CAM = False
+CAM = False
 """
 TODO:
 - add circle, and line for dxf
@@ -118,7 +118,6 @@ class Appis:
         return 'break'
 
     def show_frame(self):
-        self.mainwindow.after(33,self.show_frame)
         self.frame += 1
         if(self.frame>30):
             t_delta = datetime.now()-self.t_first
@@ -129,16 +128,15 @@ class Appis:
                 self.canv.itemconfig(self.fps_text,text=f'fps {fps:.2f}')
             self.frame = 0
             self.t_first = datetime.now()
-        t_now = datetime.now()
         if(CAM): _,frame = self.cap.read()
-        else: frame = cv2.imread("tempimg.jpg")        
+        else: frame = cv2.imread("tempimg.jpg")
         zoom = cv2.resize(frame[height//2-50:height//2+50,width//2-50:width//2+50],(200,200))
         edge = cv2.cvtColor(frame[height//2-150:height//2+150,width//2-150:width//2+150],cv2.COLOR_BGR2GRAY)
         edge = cv2.Canny(edge,80,160)
         edge = cv2.cvtColor(edge,cv2.COLOR_GRAY2RGBA)
         cv2image = cv2.cvtColor(frame,cv2.COLOR_BGR2RGBA)
         cv2zoom  = cv2.cvtColor(zoom,cv2.COLOR_BGR2RGBA)
-        
+
         img = Image.fromarray(cv2image)
         zoomimg = Image.fromarray(cv2zoom)
         edgeimg = Image.fromarray(edge)
@@ -146,36 +144,49 @@ class Appis:
         self.imgtk = ImageTk.PhotoImage(image=img)
         self.zoomtk = ImageTk.PhotoImage(image=zoomimg)
         self.edgeimg = ImageTk.PhotoImage(image=edgeimg)
-        
-        if( not self.big_image):
+
+        if(not self.big_image):
             self.big_image = self.canv.create_image((0,0),image=self.imgtk,anchor=tk.NW,state=tk.NORMAL)
             self.zoom_image =self.canv.create_image((0,0),image=self.zoomtk,anchor=tk.NW,state=tk.NORMAL)
-            self.edge_image = self.canv.create_image((width-300,0),image=self.edgeimg,anchor=tk.NW,state=tk.NORMAL)
+            self.edge_image = self.canv.create_image((width-300,0),image=self.edgeimg,anchor=tk.NW,state=tk.HIDDEN)
         else:
             self.canv.itemconfig(self.big_image,image=self.imgtk)
             self.canv.itemconfig(self.zoom_image,image=self.zoomtk)
             self.canv.itemconfig(self.edge_image,image=self.edgeimg)
+
         if(self.cam_crosshair):
-            self.canv.create_line(0, height/2, width, height/2,fill='#00FF00')
-            self.canv.create_line(width/2,0, width/2, height,fill='#00FF00')
-            self.canv.create_line(0,100,200,100,fill='#00FF00')
-            self.canv.create_line(100,0,100,200,fill='#00FF00')
-
-            self.canv.create_line(width-150,0,width-150,300,fill='#00FF00')
-            self.canv.create_line(width-300,150,width,150,fill='#00FF00')
+            self.cross1 = Crosshair(self.canv,[width/2,height/2],[width,height],self.r)
+            self.cross2 = Crosshair(self.canv,[100,100],[200,200],1)
+            self.cross3 = Crosshair(self.canv,[width-150,150],[300,300],self.r)
+            self.change_circle_r()
             self.cam_crosshair = False
+            self.edge_toggle()
+            self.zoom_toggle()
 
+        self.mainwindow.after(1,self.show_frame)
+    def edge_toggle(self):
+        if(self.builder.tkvariables['edge_enable'].get()):
+            self.cross3.show()
+            self.canv.itemconfig(self.edge_image,state=tk.NORMAL)
+        else:
+            self.cross3.hide()
+            self.canv.itemconfig(self.edge_image,state=tk.HIDDEN)
 
+    def zoom_toggle(self):
+        if(self.builder.tkvariables['zoom_enable'].get()):
+            self.cross2.show()
+            self.canv.itemconfig(self.zoom_image,state=tk.NORMAL)
+        else:
+            self.cross2.hide()
+            self.canv.itemconfig(self.zoom_image,state=tk.HIDDEN)
+    def change_circle_r(self):
         entry = self.builder.get_object('Circle_Entry',self.master).get()
-        if(not self.cam_circle):
-            self.cam_circle = self.canv.create_oval(width/2-self.r,height/2-self.r,width/2+self.r,height/2+self.r,outline="#00FF00")
-            self.cam_circle2 = self.canv.create_oval(width-150-self.r,150-self.r,width-150+self.r,150+self.r,outline="#00FF00")
         if(entry.isdigit()):
             if(int(entry)!=self.r):
                 self.r=int(entry)
-                self.canv.coords(self.cam_circle,width/2-self.r,height/2-self.r,width/2+self.r,height/2+self.r)
-                self.canv.coords(self.cam_circle2,width-150-self.r,150-self.r,width-150+self.r,150+self.r)
-        
+                self.cross1.change_r(self.r)
+                self.cross3.change_r(self.r)
+        self.mainwindow.after(500,self.change_circle_r)
     def save_dxf(self,event):
         drawing = dxf.drawing("temp.dxf")
         for point in self.pointlist:
@@ -326,6 +337,23 @@ class Appis:
         pl = self.builder.get_object('Pointlist_textfield')
         pl.delete('1.0',"end")
         pl.update()
+class Crosshair:
+    def __init__(self, canv, location, size,r):
+        self.line1 = canv.create_line(location[0]-size[0]/2,location[1],location[0]+size[0]/2,location[1],fill='#00FF00')
+        self.line2 = canv.create_line(location[0],location[1]-size[1]/2,location[0],location[1]+size[1]/2,fill='#00FF00')
+        self.circle = canv.create_oval(location[0]-r/2,location[1]-r/2,location[0]+r/2,location[1]+r/2,outline='#00FF00')
+        self.canv = canv
+        self.location = location
+    def show(self):
+        self.canv.itemconfig(self.line1,state=tk.NORMAL)
+        self.canv.itemconfig(self.line2,state=tk.NORMAL)
+        self.canv.itemconfig(self.circle,state=tk.NORMAL)
+    def hide(self):
+        self.canv.itemconfig(self.line1,state=tk.HIDDEN)
+        self.canv.itemconfig(self.line2,state=tk.HIDDEN)
+        self.canv.itemconfig(self.circle,state=tk.HIDDEN)
+    def change_r(self,r):
+        self.canv.coords(self.circle,self.location[0]-r/2,self.location[1]-r/2,self.location[0]+r/2,self.location[1]+r/2)
 if __name__ == '__main__':
     root = tk.Tk()
     app = Appis(root)
